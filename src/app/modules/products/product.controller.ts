@@ -7,11 +7,11 @@ const createNewProduct = async (req: Request, res: Response) => {
         const productData = req.body;
 
         const { success, data, error } = productValidationSchema.safeParse(productData);
-        
+
         if (!success) {
             res.status(500).json({
                 success: false,
-                message: (error.issues.map(({message}) => message)).join(", ")
+                message: (error.issues.map(({ message }) => message)).join(", ")
             })
         }
 
@@ -33,6 +33,32 @@ const createNewProduct = async (req: Request, res: Response) => {
     }
 }
 
+const getAllProducts = async (req: Request, res: Response) => {
+    try {
+        const result = await ProductServices.getAllProductsFromDB();
+
+        if (result.length > 0) {
+            res.status(200).json({
+                success: true,
+                message: "Products fetched successfully!",
+                data: result
+            })
+        } else {
+            res.status(400).json({
+                success: false,
+                message: "No products found!"
+            })
+        }
+
+    } catch(err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message ?? "Something went wrong"
+        })
+    }
+}
+
 export const ProductControllers = {
-    createNewProduct
+    createNewProduct,
+    getAllProducts
 }
