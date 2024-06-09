@@ -18,6 +18,14 @@ const orderSchema = new Schema<TOrder>({
         type: Number,
         required: [true, 'Quantity is required for the order']
     }
+}, {
+    toJSON: {
+        transform: function(doc, ret) {
+            delete ret._id,
+            delete ret.__v
+            return ret;
+        }
+    }
 })
 
 export const Order = model("Order", orderSchema);
