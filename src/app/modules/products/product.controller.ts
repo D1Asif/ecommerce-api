@@ -50,7 +50,34 @@ const getAllProducts = async (req: Request, res: Response) => {
             })
         }
 
-    } catch(err: any) {
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message ?? "Something went wrong"
+        })
+    }
+}
+
+const getAProductById = async (req: Request, res: Response) => {
+    try {
+        const { productId } = req.params;
+
+        const result = await ProductServices.getAProductByIdFromDB(productId);
+
+        if (result) {
+            res.status(200).json({
+                success: true,
+                message: "Product fetched successfully!",
+                data: result
+            })
+        } else {
+            res.status(400).json({
+                success: false,
+                message: `Product not found`
+            })
+        }
+
+    } catch (err: any) {
         res.status(500).json({
             success: false,
             message: err.message ?? "Something went wrong"
@@ -60,5 +87,6 @@ const getAllProducts = async (req: Request, res: Response) => {
 
 export const ProductControllers = {
     createNewProduct,
-    getAllProducts
+    getAllProducts,
+    getAProductById
 }
