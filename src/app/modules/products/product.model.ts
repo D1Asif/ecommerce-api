@@ -50,6 +50,14 @@ const productSchema = new Schema<TProduct>({
             required: [true, 'Inventory inStock status is required']
         }
     }
+}, {
+    toJSON: {
+        transform: function(doc, ret) {
+            delete ret._id,
+            delete ret.__v
+            return ret
+        }
+    }
 })
 
 export const Product = model("Product", productSchema);
