@@ -1,5 +1,5 @@
 # Ecommerce API
-A simple ecommerce API with product and order management built with Typescipt, Express, MongoDB atlas, Mongoose, Zod etc. Deployed API link: (Ecommerce API)[https://ecommerce-api-orpin.vercel.app/]
+A simple ecommerce API with product and order management built with Typescipt, Express, MongoDB atlas, Mongoose, Zod etc. Deployed API link: [Ecommerce API](https://ecommerce-api-orpin.vercel.app/)
 
 ## Technologies
 Typescipt, Express, MongoDB atlas, Mongoose, Zod, Vercel for deployment
@@ -389,4 +389,4 @@ How to run locally:
 2. run `npm install` to install all the project dependencies
 3. run npm run start:dev to start the server
 
-Or you you can check the deployed link: (Ecommerce API)[https://ecommerce-api-orpin.vercel.app/]
+Or you you can check out the deployed link: [Ecommerce API](https://ecommerce-api-orpin.vercel.app/)
