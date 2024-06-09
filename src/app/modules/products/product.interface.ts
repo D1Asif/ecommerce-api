@@ -15,3 +15,16 @@ export type TProduct = {
         inStock: boolean
     }
 }
+
+export type TUpdateProduct = {
+    name?: string,
+    description?: string,
+    price?: number,
+    category?: string,
+    tags?: string[],
+    variants?: TVariant[],
+    inventory?: {
+        quantity: number,
+        inStock: boolean
+    }
+}

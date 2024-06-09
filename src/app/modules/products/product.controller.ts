@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ProductServices } from "./product.service";
-import { productValidationSchema } from "./product.validation";
+import { productUpdateValidationSchema, productValidationSchema } from "./product.validation";
 
 const createNewProduct = async (req: Request, res: Response) => {
     try {
@@ -11,7 +11,9 @@ const createNewProduct = async (req: Request, res: Response) => {
         if (!success) {
             res.status(500).json({
                 success: false,
-                message: (error.issues.map(({ message }) => message)).join(", ")
+                message: (error.issues.map(({ path, message }, index) => {
+                    return `${index + 1}. Field: ${path.join(" > ")}, Issue: ${message}`
+                })).join("; ")
             })
         }
 
@@ -85,8 +87,50 @@ const getAProductById = async (req: Request, res: Response) => {
     }
 }
 
+const updateAProduct = async (req: Request, res: Response) => {
+    try {
+        const { productId } = req.params;
+        const dataToUpdate = req.body;
+
+        const { success, data, error } = productUpdateValidationSchema.safeParse(dataToUpdate);
+
+        if (!success) {
+            res.status(500).json({
+                success: false,
+                message: (error.issues.map(({ path, message }, index) => {
+                    return `${index + 1}. Field: ${path.join(" > ")}, Issue: ${message}`
+                })).join("; ")
+            })
+        }
+
+        if (success && data) {
+            const result = await ProductServices.updateAProductInDB(productId, data);
+
+            if (result) {
+                res.status(200).json({
+                    success: true,
+                    message: "Product updated successfully!",
+                    data: result
+                })
+            } else {
+                res.status(500).json({
+                    success: false,
+                    message: "Product is not updated",
+                })
+            }
+        }
+
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message ?? "Something went wrong"
+        })
+    }
+}
+
 export const ProductControllers = {
     createNewProduct,
     getAllProducts,
-    getAProductById
+    getAProductById,
+    updateAProduct
 }

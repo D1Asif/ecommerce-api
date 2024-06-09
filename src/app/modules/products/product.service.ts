@@ -1,28 +1,45 @@
-import { TProduct } from "./product.interface";
+import { TProduct, TUpdateProduct } from "./product.interface";
 import { Product } from "./product.model"
 
 const createNewProductInDB = async (productData: TProduct) => {
-    const result = await Product.create(productData);
+    const response = await Product.create(productData);
 
-    return result;
+    return response;
 }
 
 const getAllProductsFromDB = async () => {
-    const result = await Product.find();
+    const response = await Product.find();
 
-    return result;
+    return response;
 }
 
 const getAProductByIdFromDB = async (productId: string) => {
     if (productId.length !== 24) throw new Error("Invalid product ID");
 
-    const result = await Product.findById(productId);
+    const response = await Product.findById(productId);
 
-    return result;
+    return response;
+}
+
+const updateAProductInDB = async (productId: string, dataToUpdate: TUpdateProduct) => {
+    if (!dataToUpdate) throw new Error("Update data is required for product update");
+
+    const response = await Product.updateOne(
+        {_id: productId},
+        {...dataToUpdate}
+    );
+
+    if (response.acknowledged === true) {
+        const updatedProduct = await Product.findById(productId);
+        return updatedProduct;
+    }
+
+    return null;
 }
 
 export const ProductServices = {
     createNewProductInDB,
     getAllProductsFromDB,
-    getAProductByIdFromDB
+    getAProductByIdFromDB,
+    updateAProductInDB
 }
