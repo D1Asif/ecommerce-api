@@ -37,7 +37,11 @@ const createNewProduct = async (req: Request, res: Response) => {
 
 const getAllProducts = async (req: Request, res: Response) => {
     try {
-        const result = await ProductServices.getAllProductsFromDB();
+        const { searchTerm } = req.query;
+
+        const searchQuery = typeof searchTerm === 'string' ? searchTerm : undefined;
+
+        const result = await ProductServices.getAllProductsFromDB(searchQuery);
 
         if (result.length > 0) {
             res.status(200).json({
@@ -146,12 +150,12 @@ const deleteAProductById = async (req: Request, res: Response) => {
                 message: "Product could not be deleted!",
             })
         }
-    } catch(err: any) {
+    } catch (err: any) {
         res.status(500).json({
             success: false,
             message: err.message ?? "Something went wrong"
         })
-    }    
+    }
 }
 
 export const ProductControllers = {
