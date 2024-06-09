@@ -1,6 +1,6 @@
 export type TOrder = {
     email: string,
     productId: string,
-    price: string,
+    price: number,
     quantity: number
 }

@@ -1,4 +1,4 @@
-type TVariant = {
+export type TVariant = {
     type: string,
     value: string
 }
