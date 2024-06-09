@@ -8,7 +8,7 @@ const createNewProduct = async (req: Request, res: Response) => {
 
         const { success, data, error } = productValidationSchema.safeParse(productData);
 
-        if (!success) {
+        if (!success && error) {
             res.status(500).json({
                 success: false,
                 message: (error.issues.map(({ path, message }, index) => {
@@ -98,7 +98,7 @@ const updateAProduct = async (req: Request, res: Response) => {
 
         const { success, data, error } = productUpdateValidationSchema.safeParse(dataToUpdate);
 
-        if (!success) {
+        if (!success && error) {
             res.status(500).json({
                 success: false,
                 message: (error.issues.map(({ path, message }, index) => {

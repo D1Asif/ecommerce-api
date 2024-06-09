@@ -8,7 +8,7 @@ const createANewOrder = async (req: Request, res: Response) => {
 
         const { success, data, error } = orderValidationSchema.safeParse(orderData);
 
-        if (!success) {
+        if (!success && error) {
             res.status(500).json({
                 success: false,
                 message: (error.issues.map(({ path, message }, index) => {

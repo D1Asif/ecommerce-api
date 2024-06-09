@@ -35,34 +35,59 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var app_1 = __importDefault(require("./app"));
-var config_1 = require("./app/config");
-function main() {
-    return __awaiter(this, void 0, void 0, function () {
-        var err_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, mongoose_1.default.connect(config_1.config.databaseUrl)];
-                case 1:
-                    _a.sent();
-                    app_1.default.listen(config_1.config.port, function () {
-                        console.log("E-commerce API app listening on port " + config_1.config.port);
-                    });
-                    return [3 /*break*/, 3];
-                case 2:
-                    err_1 = _a.sent();
-                    console.log(err_1);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
+exports.OrderServices = void 0;
+var product_model_1 = require("../products/product.model");
+var order_model_1 = require("./order.model");
+var createANewOrderInDB = function (orderData) { return __awaiter(void 0, void 0, void 0, function () {
+    var productId, product, response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                productId = orderData.productId;
+                return [4 /*yield*/, product_model_1.Product.findById(productId)];
+            case 1:
+                product = _a.sent();
+                if (!product) {
+                    throw new Error("Product does not exist");
+                }
+                if (product.inventory.quantity < orderData.quantity) {
+                    throw new Error("Insufficient quantity available in inventory");
+                }
+                return [4 /*yield*/, order_model_1.Order.create(orderData)];
+            case 2:
+                response = _a.sent();
+                if (response) {
+                    product.inventory.quantity = product.inventory.quantity - orderData.quantity;
+                    product.save();
+                    return [2 /*return*/, response];
+                }
+                else {
+                    throw new Error("Database error");
+                }
+                return [2 /*return*/];
+        }
     });
-}
-main();
+}); };
+var getAllOrdersFromDB = function (email) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!email) return [3 /*break*/, 2];
+                return [4 /*yield*/, order_model_1.Order.find({ email: email })];
+            case 1:
+                response = _a.sent();
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, order_model_1.Order.find()];
+            case 3:
+                response = _a.sent();
+                _a.label = 4;
+            case 4: return [2 /*return*/, response];
+        }
+    });
+}); };
+exports.OrderServices = {
+    createANewOrderInDB: createANewOrderInDB,
+    getAllOrdersFromDB: getAllOrdersFromDB
+};
