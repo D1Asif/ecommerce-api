@@ -17,7 +17,8 @@ export const productValidationSchema = z.object({
     inventory: z.object({
         quantity: z.number().nonnegative(),
         inStock: z.boolean()
-    })
+    }),
+    isDeleted: z.boolean().default(false)
 });
 
 export const productUpdateValidationSchema = z.object({
@@ -33,5 +34,5 @@ export const productUpdateValidationSchema = z.object({
     inventory: z.object({
         quantity: z.number().nonnegative(),
         inStock: z.boolean()
-    }).optional()
+    }).optional(),
 });

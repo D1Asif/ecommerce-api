@@ -49,15 +49,37 @@ const productSchema = new Schema<TProduct>({
             type: Boolean,
             required: [true, 'Inventory inStock status is required']
         }
+    },
+    isDeleted: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 }, {
     toJSON: {
         transform: function(doc, ret) {
             delete ret._id,
             delete ret.__v
+            delete ret.isDeleted
             return ret
         }
     }
+})
+
+productSchema.pre('find', function(next) {
+    this.find({isDeleted: {$ne: true}});
+
+    next();
+});
+
+productSchema.pre('findOne', function(next) {
+    this.find({isDeleted: {$ne: true}});
+
+    next();
+});
+
+productSchema.pre('aggregate', function(next) {
+    this.pipeline().unshift({$match: {isDeleted: {$ne: true}}})
 })
 
 export const Product = model("Product", productSchema);

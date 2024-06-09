@@ -13,7 +13,8 @@ export type TProduct = {
     inventory: {
         quantity: number,
         inStock: boolean
-    }
+    },
+    isDeleted: boolean
 }
 
 export type TUpdateProduct = {

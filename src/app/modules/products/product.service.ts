@@ -37,9 +37,26 @@ const updateAProductInDB = async (productId: string, dataToUpdate: TUpdateProduc
     return null;
 }
 
+const deleteProductByIdFromDB = async(productId: string) => {
+    const product = await Product.findById(productId);
+
+    if (product) {
+        if (product.isDeleted) {
+            throw new Error(`Product with id: ${productId} does not exist.`)
+        } else {
+            product.isDeleted = true;
+            const res = await product.save();
+            if (res.isDeleted) return true;
+        }
+    } else {
+        throw new Error(`Product with id: ${productId} does not exist.`)
+    }
+}
+
 export const ProductServices = {
     createNewProductInDB,
     getAllProductsFromDB,
     getAProductByIdFromDB,
-    updateAProductInDB
+    updateAProductInDB,
+    deleteProductByIdFromDB
 }
