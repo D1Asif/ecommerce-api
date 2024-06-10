@@ -78,16 +78,22 @@ productSchema.pre('findOne', function(next) {
     next();
 });
 
-productSchema.pre('updateOne', function() {
+productSchema.pre('updateOne', function(next) {
     this.find({isDeleted: {$ne: true}})
+
+    next()
 })
 
-productSchema.pre('updateMany', function() {
+productSchema.pre('updateMany', function(next) {
     this.find({isDeleted: {$ne: true}})
+
+    next();
 })
 
 productSchema.pre('aggregate', function(next) {
     this.pipeline().unshift({$match: {isDeleted: {$ne: true}}})
+
+    next();
 })
 
 export const Product = model("Product", productSchema);

@@ -73,13 +73,16 @@ productSchema.pre('findOne', function (next) {
     this.find({ isDeleted: { $ne: true } });
     next();
 });
-productSchema.pre('updateOne', function () {
+productSchema.pre('updateOne', function (next) {
     this.find({ isDeleted: { $ne: true } });
+    next();
 });
-productSchema.pre('updateMany', function () {
+productSchema.pre('updateMany', function (next) {
     this.find({ isDeleted: { $ne: true } });
+    next();
 });
 productSchema.pre('aggregate', function (next) {
     this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+    next();
 });
 exports.Product = (0, mongoose_1.model)("Product", productSchema);
