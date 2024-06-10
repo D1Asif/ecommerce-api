@@ -104,10 +104,14 @@ var updateAProductInDB = function (productId, dataToUpdate) { return __awaiter(v
             case 0:
                 if (!dataToUpdate)
                     throw new Error("Update data is required for product update");
+                if (productId.length !== 24)
+                    throw new Error("Invalid product ID");
                 return [4 /*yield*/, product_model_1.Product.updateOne({ _id: productId }, __assign({}, dataToUpdate))];
             case 1:
                 response = _a.sent();
                 if (!(response.acknowledged === true)) return [3 /*break*/, 3];
+                if (response.matchedCount === 0)
+                    throw new Error("No product with id: " + productId + " exists");
                 return [4 /*yield*/, product_model_1.Product.findById(productId)];
             case 2:
                 updatedProduct = _a.sent();

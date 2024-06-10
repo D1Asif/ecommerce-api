@@ -183,10 +183,7 @@ var updateAProduct = function (req, res) { return __awaiter(void 0, void 0, void
                     });
                 }
                 else {
-                    res.status(500).json({
-                        success: false,
-                        message: "Product is not updated",
-                    });
+                    throw new Error("Something went wrong");
                 }
                 _c.label = 2;
             case 2: return [3 /*break*/, 4];
