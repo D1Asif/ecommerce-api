@@ -57,15 +57,13 @@ var createANewOrderInDB = function (orderData) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, order_model_1.Order.create(orderData)];
             case 2:
                 response = _a.sent();
-                if (response) {
-                    product.inventory.quantity = product.inventory.quantity - orderData.quantity;
-                    product.save();
-                    return [2 /*return*/, response];
-                }
-                else {
-                    throw new Error("Database error");
-                }
-                return [2 /*return*/];
+                if (!response) return [3 /*break*/, 4];
+                product.inventory.quantity = product.inventory.quantity - orderData.quantity;
+                return [4 /*yield*/, product.save()];
+            case 3:
+                _a.sent();
+                return [2 /*return*/, response];
+            case 4: throw new Error("Database error");
         }
     });
 }); };

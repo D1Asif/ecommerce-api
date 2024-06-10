@@ -18,7 +18,7 @@ const createANewOrderInDB = async (orderData: TOrder) => {
 
     if (response) {
         product.inventory.quantity = product.inventory.quantity - orderData.quantity;
-        product.save();
+        await product.save();
         return response;
     } else {
         throw new Error("Database error");
