@@ -117,10 +117,7 @@ const updateAProduct = async (req: Request, res: Response) => {
                     data: result
                 })
             } else {
-                res.status(500).json({
-                    success: false,
-                    message: "Product is not updated",
-                })
+                throw new Error("Something went wrong");
             }
         }
 

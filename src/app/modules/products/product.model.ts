@@ -78,6 +78,14 @@ productSchema.pre('findOne', function(next) {
     next();
 });
 
+productSchema.pre('updateOne', function() {
+    this.find({isDeleted: {$ne: true}})
+})
+
+productSchema.pre('updateMany', function() {
+    this.find({isDeleted: {$ne: true}})
+})
+
 productSchema.pre('aggregate', function(next) {
     this.pipeline().unshift({$match: {isDeleted: {$ne: true}}})
 })

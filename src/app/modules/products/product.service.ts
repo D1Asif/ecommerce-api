@@ -34,6 +34,7 @@ const getAProductByIdFromDB = async (productId: string) => {
 
 const updateAProductInDB = async (productId: string, dataToUpdate: TUpdateProduct) => {
     if (!dataToUpdate) throw new Error("Update data is required for product update");
+    if (productId.length !== 24) throw new Error("Invalid product ID");
 
     const response = await Product.updateOne(
         {_id: productId},
@@ -41,6 +42,7 @@ const updateAProductInDB = async (productId: string, dataToUpdate: TUpdateProduc
     );
 
     if (response.acknowledged === true) {
+        if (response.matchedCount === 0) throw new Error(`No product with id: ${productId} exists`)
         const updatedProduct = await Product.findById(productId);
         return updatedProduct;
     }
