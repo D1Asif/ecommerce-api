@@ -58,8 +58,7 @@ var productSchema = new mongoose_1.Schema({
 }, {
     toJSON: {
         transform: function (doc, ret) {
-            delete ret._id,
-                delete ret.__v;
+            delete ret.__v;
             delete ret.isDeleted;
             return ret;
         }

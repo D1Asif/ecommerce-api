@@ -21,6 +21,7 @@ const orderSchema = new Schema<TOrder>({
 }, {
     toJSON: {
         transform: function(doc, ret) {
+            delete ret.__v
             return ret;
         }
     }

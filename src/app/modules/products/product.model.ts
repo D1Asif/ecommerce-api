@@ -58,6 +58,7 @@ const productSchema = new Schema<TProduct>({
 }, {
     toJSON: {
         transform: function(doc, ret) {
+            delete ret.__v
             delete ret.isDeleted
             return ret
         }
